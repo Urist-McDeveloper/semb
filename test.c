@@ -1,7 +1,6 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <sys/stat.h>
-#include <assert.h>
 
 #include "embed/test.h"
 
@@ -9,6 +8,8 @@
 #   define _CRT_SECURE_NO_DEPRECATE
 #   define stat _stat
 #endif
+
+#define assert(X) if (!(X)) {fprintf(stderr, "Assertion failed: " #X); exit(1); }
 
 static unsigned char buffer[1024 * 1024];
 
