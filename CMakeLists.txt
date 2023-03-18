@@ -8,7 +8,7 @@ set_target_properties(semb PROPERTIES
 
 option(SEMB_BUILD_TEST "Build test.c; the file is not checked into git repository" OFF)
 if (SEMB_BUILD_TEST)
-    add_executable(semb-test test.c test.h)
+    add_executable(semb-test test.c)
     set_target_properties(semb-test PROPERTIES
             C_STANDARD 90
             C_EXTENSIONS OFF)

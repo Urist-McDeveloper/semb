@@ -5,8 +5,8 @@
 #   define _CRT_SECURE_NO_DEPRECATE
 #endif
 
-#define MAX_FILES           128
-#define MAX_NAME_LENGTH     128
+#define MAX_FILES           255
+#define MAX_NAME_LENGTH     255
 #define BUFFER_SIZE         4096
 #define MAX_NUM_PER_LINE    64
 
@@ -112,17 +112,17 @@ int main(int argc, char **argv) {
             if (ch == '\0') break;
 
             files[i].file_name[files[i].file_name_length++] = ch;
-            switch (ch) {
-                case '/':
-                case '\\':
-                    files[i].data_name_length = 0;
-                    break;
-                case '.':
-                case ' ':
-                    files[i].data_name[files[i].data_name_length++] = '_';
-                    break;
-                default:
+            if (ch == '/' || ch == '\\') {
+                files[i].data_name_length = 0;
+            } else {
+                int is_valid = (ch >= 'a' && ch <= 'z') ||
+                               (ch >= 'A' && ch <= 'Z') ||
+                               (files[i].data_name_length != 0 && ch >= '0' && ch <= '1');
+                if (is_valid) {
                     files[i].data_name[files[i].data_name_length++] = ch;
+                } else {
+                    files[i].data_name[files[i].data_name_length++] = '_';
+                }
             }
         }
         if (j == MAX_NAME_LENGTH) {
