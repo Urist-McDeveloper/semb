@@ -45,8 +45,8 @@ static char wr_buf[BUFFER_SIZE];
 static int wr_used;
 
 static void flush() {
-    int read = (int)fwrite(wr_buf, 1, wr_used, stdout);
-    if (read != wr_used) {
+    int wrote = (int)fwrite(wr_buf, 1, wr_used, stdout);
+    if (wrote != wr_used) {
         if (feof(stdout)) {
             perror("STDOUT is closed");
         } else if (ferror(stdout)) {
@@ -79,6 +79,7 @@ static void write_file(struct file_data data) {
     FILE *f = fopen(data.file_name, "rb");
     if (f == NULL) {
         perror("Failed to open file");
+        fprintf(stderr, "Failed to open file: %s\n", data.file_name);
         exit(EXIT_FAILURE);
     }
 
@@ -107,6 +108,7 @@ static void write_file(struct file_data data) {
 
     if (ferror(f)) {
         perror("Failed to read file");
+        fprintf(stderr, "Failed to read file: %s\n", data.file_name);
         exit(EXIT_FAILURE);
     } else {
         fclose(f);

@@ -1,6 +1,6 @@
 # Simple embedded files for CMake projects
 
-A simple and tiny tool to embed files, written in C89.
+A simple and tiny tool for embedding files, written in C89.
 
 ### Why would I use this?
 
@@ -11,13 +11,13 @@ A simple and tiny tool to embed files, written in C89.
 ### Why would I not use this?
 
 1. CMake 3.20 is required for `cmake_path` command;
-2. big files are slow to embed and even slower to compile (although you shouldn't embed big files anyway);
-3. having ~140 LOC dependency is a bit too much or you.
+2. big files are slow to embed and even slower to compile;
+3. having ~140 LOC dependency is a bit too much for you.
 
 ## Usage
 
 1. Add this repo as a CMake subdirectory (you only need `semb.c` and `CMakeLists.txt`);
-2. Use CMake function `semb_generate(my-target OUT output.h FILES file1.txt file2.png)`;
+2. Use CMake function `semb_generate(my-target OUT output.h FILES docs/file1.txt ../res/img/file2.png)`;
    it will generate the following file:
    ```c
    static const unsigned char file1_txt[] = {
