@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.20)
 project(semb C)
 
-add_executable(semb main.c)
+add_executable(semb semb.c)
 set_target_properties(semb PROPERTIES
         C_STANDARD 90
         C_EXTENSIONS OFF)
@@ -29,6 +29,6 @@ if (SEMB_BUILD_TEST)
             C_STANDARD 90
             C_EXTENSIONS OFF)
     semb_generate(semb-test OUT embed/test.h FILES
-            main.c
+            semb.c
             test.c)
 endif()

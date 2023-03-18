@@ -49,7 +49,7 @@ void assert_file_eq(const char *filename, const unsigned char *buf, unsigned int
 #define assert_eq(filename, buf)    assert_file_eq(filename, buf, sizeof(buf))
 
 int main() {
-    assert_eq("main.c", main_c);
+    assert_eq("semb.c", semb_c);
     assert_eq("test.c", test_c);
     return 0;
 }
