@@ -17,21 +17,26 @@ A simple and tiny tool for embedding files, written in C89.
 ## Usage
 
 1. Add this repo as a CMake subdirectory (you only need `semb.c` and `CMakeLists.txt`);
-2. Use CMake function `semb_generate(my-target OUT output.h FILES docs/file1.txt ../res/img/file2.png)`;
-   it will generate the following file:
+2. Use CMake function `semb_generate`;
+3. `#include` generated file and use embedded data.
+
+`semb_generate(my-target OUT output.h FILES docs/file1.txt ../img/file2.png)` will:
+
+1. generate `output.h` in current binary directory during build process:
    ```c
    static const unsigned char file1_txt[] = {
-            0x00, 0x00, ...
+           0x00, 0x00, ...
    };
    static const unsigned char file2_png[] = {
-            0x00, 0x00, ...
+           0x00, 0x00, ...
    };
    ```
-3. Add `#include "output.h"` to some file from `my-target` and use embedded data however you like.
+2. add `output.h` to the source list of `my-target`;
+3. add current binary dir as include directory for `my-target`.
 
 ### Example
 
-Let's make a program that prints its source code.
+Let's make a program that prints its own source code.
 
 ##### Project structure
 
