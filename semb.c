@@ -29,7 +29,7 @@
 #define MAX_FILES           255
 #define MAX_NAME_LENGTH     255
 #define BUFFER_SIZE         4096
-#define MAX_NUM_PER_LINE    64
+#define MAX_PER_LINE        64
 
 struct file_data {
     int file_name_length;
@@ -68,7 +68,7 @@ static void write(const char *str, int size) {
 
 #define DATA_DECL       "static const unsigned char "
 #define DATA_BGN        "[] = {\n"
-#define DATA_PFX        "       "
+#define DATA_PFX        "        "
 #define DATA_END        "\n};\n"
 
 #define write_str(STR)  write(STR, sizeof(STR) - 1)
@@ -88,21 +88,21 @@ static void write_file(struct file_data data) {
     write_str(DATA_BGN);
 
     int i, idx = 0, got;
-    char num[6] = " 0x00,";
+    char num[5] = "0x00,";
 
     do {
         got = (int)fread(rd_buf, 1, BUFFER_SIZE, f);
         for (i = 0; i < got; i++) {
-            if (idx == MAX_NUM_PER_LINE) {
+            if (idx == MAX_PER_LINE) {
                 write("\n", 1);
                 idx = 0;
             }
             if (idx++ == 0) {
                 write_str(DATA_PFX);
             }
-            num[3] = "0123456789abcdef"[rd_buf[i] / 16];
-            num[4] = "0123456789abcdef"[rd_buf[i] % 16];
-            write(num, 6);
+            num[2] = "0123456789abcdef"[rd_buf[i] / 16];
+            num[3] = "0123456789abcdef"[rd_buf[i] % 16];
+            write(num, 5);
         }
     } while (got == BUFFER_SIZE);
 
