@@ -7,8 +7,10 @@ set_target_properties(semb PROPERTIES
         C_EXTENSIONS OFF)
 
 function(semb_generate target)
-    cmake_parse_arguments(PARSE_ARGV 1 arg "" "OUT" "FILES")
-    list(TRANSFORM arg_FILES PREPEND "${CMAKE_CURRENT_SOURCE_DIR}/")
+    cmake_parse_arguments(PARSE_ARGV 1 arg "BINARY" "OUT;PREFIX" "FILES")
+    if (NOT arg_BINARY)
+        list(TRANSFORM arg_FILES PREPEND "${CMAKE_CURRENT_SOURCE_DIR}/")
+    endif()
 
     cmake_path(GET arg_OUT PARENT_PATH out_dir)
     file(MAKE_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/${out_dir}")

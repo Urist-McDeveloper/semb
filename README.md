@@ -1,18 +1,19 @@
-# Simple embedded files for CMake projects
+# Embedded files for CMake projects
 
-A simple and tiny tool for embedding files, written in C89.
+A simple tool for embedding files through static arrays, written in C89.
 
 ### Why would I use this?
 
-1. C23's `#embed` is cool and maybe will be supported by a small number of compilers in a decade or two;
-2. `ld` magic is not available on Windows;
-3. `xxd` is an external tool that you have to install before compiling, `semb` builds and runs from CMake.
+1. C23's `#embed` is cool and may even be supported by a small number of compilers in a decade or two.
+2. `ld` magic is not available on Windows.
+3. `xxd` is an external tool that you have to install, `semb` builds and runs from CMake.
 
 ### Why would I not use this?
 
-1. CMake 3.20 is required for `cmake_path` command;
-2. big files are slow to embed and even slower to compile;
-3. having ~140 LOC dependency is a bit too much for you.
+1. You don't need to embed files.
+2. CMake 3.20 is required for `cmake_path` command.
+3. Big files are slow to embed and even slower to compile.
+4. Having ~140 LOC dependency is a bit too much for you.
 
 ## Usage
 
@@ -20,21 +21,47 @@ A simple and tiny tool for embedding files, written in C89.
 2. Use CMake function `semb_generate`;
 3. `#include` generated file and use embedded data.
 
-`semb_generate(my-target OUT output.h FILES docs/file1.txt ../img/file2.png)` will:
+##### The function
 
-1. generate `output.h` in current binary directory during build process:
-   ```c
-   static const unsigned char file1_txt[] = {
-           0x00, 0x00, ...
-   };
-   static const unsigned char file2_png[] = {
-           0x00, 0x00, ...
-   };
+```cmake
+semb_generate(<target> OUT <output.h> [BINARY] FILES <file1> [<fileN>...])
+```
+
+What it does:
+
+* adds current binary directory as include directory for `target`;
+* generates `output.h` in current binary directory during build process:
+   * any relative path may be used, e.g. `../foo/bar.h`;
+   * to `#include` the generated file simply use the same path;
+* adds `output.h` to the source list of `target`.
+* `fileN` are paths of files to be embedded:
+   * if `BINARY` option is set, paths are resolved from current binary directory;
+   * if `BINARY` option is not set, paths are resolved from current source directory.
+
+##### A quick example
+
+```cmake
+semb_generate(my-target OUT embed.h FILES
+        ../img/file1.png
+        doc/file2.txt
+        file3.ext)
+```
+
+Will generate:
+
+```c
+static const unsigned char file1_png[] = {
+        0x00, 0x00, ...
+};
+static const unsigned char file2_txt[] = {
+        0x00, 0x00, ...
+};
+static const unsigned char file3_ext[] = {
+        0x00, 0x00, ...
+};
    ```
-2. add `output.h` to the source list of `my-target`;
-3. add current binary dir as include directory for `my-target`.
 
-### Example
+### Full example
 
 Let's make a program that prints its own source code.
 
